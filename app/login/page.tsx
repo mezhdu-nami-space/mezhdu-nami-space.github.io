@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { Heart, LockKeyhole, Mail } from "lucide-react";
-import { appPath, configured, requestPasswordReset, signIn, signUp } from "@/lib/supabase-rest";
+import { appPath, configured, requestPasswordReset, signIn, signInWithYandex, signUp } from "@/lib/supabase-rest";
 
 export default function LoginPage() {
   const [mode, setMode] = useState<"login" | "register" | "forgot">("login");
@@ -19,6 +19,16 @@ export default function LoginPage() {
     setMode(next); setError(""); setMessage("");
     const query = next === "login" ? "" : `?mode=${next}`;
     history.replaceState(null, "", `${appPath("/login/")}${query}`);
+  };
+
+  const yandexLogin = () => {
+    try {
+      setError("");
+      if (!configured()) throw new Error("Сайт ещё не подключён к базе.");
+      signInWithYandex();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Не удалось открыть вход через Яндекс.");
+    }
   };
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
@@ -77,6 +87,15 @@ export default function LoginPage() {
           {mode === "login" && <button type="button" className="forgot-link" onClick={() => navigateMode("forgot")}>Забыли пароль?</button>}
           {mode === "forgot" && <button type="button" className="auth-back-link" onClick={() => navigateMode("login")}>Вернуться ко входу</button>}
         </form>
+        {mode !== "forgot" && <>
+          <div className="auth-divider">или</div>
+          <div className="provider-buttons">
+            <a href="#" onClick={(event) => { event.preventDefault(); yandexLogin(); }}>
+              <span className="provider-yandex">Я</span>
+              Войти через Яндекс
+            </a>
+          </div>
+        </>}
         <p className="privacy-caption">Номер телефона не нужен. Данные пары доступны только вошедшим участникам вашего пространства.</p>
       </section>
     </main>
