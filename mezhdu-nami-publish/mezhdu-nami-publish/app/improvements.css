@@ -1,0 +1,63 @@
+/* Dialog portals need their own readable palette, independent of page theme. */
+.form-dialog,.help-dialog {
+  --app-bg:#fff8fa;--surface:#fff;--ink:#32242a;--subtle:#65515a;
+  --brand:#c33560;--brand-deep:#aa244d;--soft:#ffe2ea;--line:#dbbbc7;
+  color:var(--ink)!important;color-scheme:light;
+}
+.help-dialog h2,.help-dialog h3,.help-dialog [data-slot="dialog-title"]{color:#32242a!important}
+.help-dialog [data-slot="dialog-description"],.help-steps p{color:#65515a!important;font-size:1rem;line-height:1.55}
+.help-steps h3{font-size:1.05rem}.help-steps small{font-size:.875rem;color:#aa244d}
+.help-dialog [data-slot="dialog-close"]{color:#32242a;opacity:1}
+.form-dialog label,.form-dialog [data-slot="dialog-description"]{font-size:.875rem}
+.form-dialog input,.form-dialog textarea,.form-dialog select{font-size:1rem;min-width:0;width:100%;max-width:100%;color:#32242a;background:#fff}
+.form-dialog input::placeholder,.form-dialog textarea::placeholder{color:#76616b;opacity:1}
+.form-dialog form>button{color:#fff}.form-row>*{min-width:0}
+.photo-hint,.calendar-hint{font-size:.875rem;line-height:1.5;color:var(--subtle);margin:10px 0}
+.upload-error{color:#a51438;background:#ffe8ee;padding:12px;border-radius:12px;font-size:1rem}
+.background-upload,.profile-preview label,.chat-file-button{position:relative;overflow:hidden;min-height:44px}
+.background-upload input,.profile-preview input,.chat-file-button input{display:block!important;position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.background-preview{display:block;width:100%;max-height:180px;object-fit:cover;border-radius:16px;margin-top:12px}
+.couple-shell.has-photo-bg .calendar-card{background-image:linear-gradient(color-mix(in srgb,var(--app-bg) 60%,transparent),color-mix(in srgb,var(--app-bg) 68%,transparent)),var(--couple-bg);background-size:cover;background-position:center}
+.couple-shell.has-photo-bg .month-grid button{background:color-mix(in srgb,var(--app-bg) 70%,transparent);text-shadow:0 0 4px var(--app-bg)}
+.event-actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 22px}
+.event-actions button{min-height:44px;height:auto;white-space:normal;background:var(--surface);color:var(--ink);border-color:var(--line);font-size:.875rem}
+.event-card>div{min-width:0}.event-card h3,.event-card p{overflow-wrap:anywhere}
+.day-dialog{max-height:88dvh;overflow:auto}.day-dialog .event-card{box-shadow:none}
+.chat-page[data-state="active"]{display:flex;flex-direction:column;height:auto;min-height:0;padding-bottom:8px}
+html[data-keyboard="true"] .bottom-nav{display:none!important}
+html[data-keyboard="true"] .normal-room{height:calc(var(--visible-height,100dvh) - 165px);min-height:180px;grid-template-rows:minmax(0,1fr) auto}
+html[data-keyboard="true"] .chat-heading{display:none}
+.chat-page[data-state="inactive"]{display:none}
+.normal-room{height:calc(var(--visible-height,100dvh) - 260px);min-height:300px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:12px}
+.normal-room .chat-heading{margin:0;padding:4px 4px 12px}.normal-room .chat-heading h2{font-size:1.2rem}
+.normal-room .messages{position:static;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 2px 16px;display:flex;flex-direction:column;gap:9px}
+.normal-room .chat-composer{position:static;min-height:0;max-height:45dvh;overflow-y:auto;border-top:1px solid var(--line);margin:0;padding:8px 0 0;background:transparent}
+.normal-room .message-form{position:static!important;inset:auto!important;transform:none!important;margin:0!important}
+.normal-room .message{animation:incomingMessage .22s ease-out}.normal-room .message-form input{width:0}
+@keyframes incomingMessage{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.wish-actions{display:grid;gap:8px;margin-top:14px}.wish-actions small{font-size:.875rem;line-height:1.4;color:var(--subtle)}
+.wish-photo{height:auto;aspect-ratio:1;object-fit:contain;background:var(--surface)}
+.wish-square-preview{width:100%;max-width:320px;aspect-ratio:1;object-fit:contain;border-radius:16px;margin:12px auto}
+.wish-crop-editor{display:grid;gap:12px;padding:12px 0;color:var(--ink)}
+.wish-crop-editor p{font-size:.875rem;line-height:1.5;margin:0}
+.wish-crop-editor canvas{display:block;width:100%;max-width:360px;aspect-ratio:1;height:auto;margin:auto;border-radius:12px;touch-action:none;cursor:grab;border:2px solid var(--brand)}
+.wish-crop-editor label{display:grid;gap:4px;font-size:.875rem}
+.wish-crop-editor input[type=range]{width:100%;min-height:32px;accent-color:var(--brand);padding:0}
+.crop-actions{display:flex;gap:8px;flex-wrap:wrap}.crop-actions button{min-height:44px;height:auto;white-space:normal}
+.form-dialog .notification-choice{display:flex;align-items:center;gap:10px;font-size:1rem}.form-dialog .notification-choice input{width:20px;height:20px;flex:none}
+.chat-page .message{flex-shrink:0;overflow-wrap:anywhere}
+.message-footer{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.message-footer .delete-message{background:transparent;color:inherit;border:0;text-decoration:underline;font-size:.8rem;min-height:44px;padding:4px 6px;cursor:pointer}
+.chat-composer{position:relative;flex:0 0 auto;background:var(--app-bg);padding-top:8px}
+.chat-composer .message-form{position:static;flex-shrink:0;gap:4px;align-items:center}
+.chat-composer .message-form>input{min-width:0;flex:1;font-size:1rem}
+.chat-composer .message-form>button,.chat-file-button{flex:0 0 36px;width:36px;height:40px;display:grid;place-items:center}
+.chat-file-button{color:var(--brand);cursor:pointer}.chat-file-button svg{width:22px}
+.chat-composer .emoji-toggle{background:transparent;font-size:1.25rem;border:0}
+.emoji-picker{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px}
+.emoji-picker button{font-size:1.4rem;min-height:40px;background:none;border:0}
+.chat-attachment{display:flex;gap:12px;align-items:center;padding:8px}.chat-attachment img{width:72px;height:72px;object-fit:cover;border-radius:12px}
+.chat-photo{display:block;max-width:100%;width:260px;max-height:320px;object-fit:contain;border-radius:12px;margin:6px 0}
+.chat-composer>.photo-hint{margin:4px 8px;font-size:.8rem}
+.couple-shell[data-theme="night"] .message.mine{color:#211630}.message time,.message span{opacity:.9}
+@media(max-width:520px){.form-row{grid-template-columns:1fr}.help-steps article{padding:12px;gap:10px}.emoji-picker{grid-template-columns:repeat(8,1fr)}}
