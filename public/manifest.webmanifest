@@ -1,0 +1,13 @@
+{
+  "name": "Между нами",
+  "short_name": "Между нами",
+  "description": "Общее пространство для двоих",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff8fa",
+  "theme_color": "#d94e75",
+  "icons": [
+    { "src": "./favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
