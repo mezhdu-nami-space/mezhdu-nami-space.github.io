@@ -77,6 +77,16 @@ export async function signIn(email: string, password: string) {
   return data as AuthSession;
 }
 
+export function signInWithYandex() {
+  const c = config();
+  if (!configured()) throw new Error("Приложение ещё не подключено к Supabase.");
+  const redirectTo = `${window.location.origin}${appPath("/")}`;
+  const url = new URL(`${c.supabaseUrl}/auth/v1/authorize`);
+  url.searchParams.set("provider", "custom:yandex");
+  url.searchParams.set("redirect_to", redirectTo);
+  window.location.href = url.toString();
+}
+
 export async function signUp(email: string, password: string, name: string) {
   const redirectTo = `${window.location.origin}${appPath("/")}`;
   const response = await authFetch(`/signup?redirect_to=${encodeURIComponent(redirectTo)}`, { method: "POST", body: JSON.stringify({ email, password, data: { name } }) });
