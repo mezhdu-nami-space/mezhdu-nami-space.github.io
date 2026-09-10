@@ -31,10 +31,10 @@ type AppData = { user: { id: string; name: string }; onboarding: boolean; waitin
 
 
 const themes = [
-  { id: "rose", name: "Нежность", colors: "#ff6f91, #ffd2dd" },
-  { id: "ocean", name: "Океан", colors: "#137c8b, #b8e5ea" },
-  { id: "sunset", name: "Закат", colors: "#dd6336, #ffd39b" },
-  { id: "night", name: "Ночная", colors: "#7357c7, #19152b" },
+  { id: "rose", name: "Нежность", colors: "#c85d7a, #f5d9df" },
+  { id: "ocean", name: "Жемчужная", colors: "#5d9aa4, #dceff0" },
+  { id: "sunset", name: "Шампань", colors: "#d58d67, #f6dfc9" },
+  { id: "night", name: "Ночная", colors: "#98779f, #2b2032" },
 ];
 
 async function api(action: string, payload: Record<string, unknown> = {}): Promise<any> {
@@ -131,6 +131,9 @@ export default function CoupleApp() {
   const today = format(new Date(), "yyyy-MM-dd");
   const upcoming = events.filter(e => !e.cancelled && e.eventDate >= today).slice(0, 3);
   const pending = (data.invitations ?? []).filter(i => i.status === "pending" && i.authorUserId !== data.user.id);
+  const relationshipDays = pair.relationshipDate
+    ? Math.max(1, Math.floor((Date.now() - new Date(`${pair.relationshipDate}T00:00:00`).getTime()) / 86_400_000) + 1)
+    : null;
 
   const submitEvent = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -176,8 +179,15 @@ export default function CoupleApp() {
         </TabsList>
 
         <TabsContent value="calendar" className="tab-page">
-          <section className="hero-card">
-            <div><p>Ближайшее</p><h2>{upcoming[0]?.title ?? "Запланируйте ваш день"}</h2>{upcoming[0] && <span>{prettyDate(upcoming[0].eventDate)} {upcoming[0].eventTime && `в ${upcoming[0].eventTime}`}</span>}</div>
+          <section
+            className={`hero-card ${upcoming[0]?.photoUrl ? "has-event-photo" : ""}`}
+            style={upcoming[0]?.photoUrl ? ({ "--hero-photo": `url("${upcoming[0].photoUrl}")` } as CSSProperties) : undefined}
+          >
+            <div className="hero-copy">
+              <p>Ближайшее</p>
+              <h2>{upcoming[0]?.title ?? "Запланируйте ваш день"}</h2>
+              {upcoming[0] && <span>{prettyDate(upcoming[0].eventDate)} {upcoming[0].eventTime && `в ${upcoming[0].eventTime}`}</span>}
+            </div>
             <Button className="primary-add" onClick={() => openEvent()}><Plus /> Добавить</Button>
           </section>
           <section className="calendar-card">
@@ -190,6 +200,16 @@ export default function CoupleApp() {
         </TabsContent>
 
         <TabsContent value="chat" className="tab-page chat-page">
+          {relationshipDays && (
+            <div className="relationship-strip">
+              <span className="relationship-heart"><Heart fill="currentColor" /></span>
+              <div>
+                <strong>Мы вместе {relationshipDays} {dayWord(relationshipDays)} ♡</strong>
+                <small>И это только начало</small>
+              </div>
+              <Heart className="relationship-mini" />
+            </div>
+          )}
           <div className="chat-switch"><button className={!secretOpen ? "active" : ""} onClick={() => setSecretOpen(false)}><MessageCircle /> Обычный чат</button><button className={secretOpen ? "active secret" : "secret"} onClick={() => setSecretOpen(true)}><Lock /> Секретная комната</button></div>
           {secretOpen ? <SecretRoom pairId={pair.id} messages={data.secretMessages ?? []} userId={data.user.id} onRefresh={load} /> : <section className="normal-room"><div className="section-heading chat-heading"><div><p className="eyebrow">только между вами</p><h2>{partnerAlias || partner?.displayName || "Ваш чат"}</h2></div></div>
           <div className="messages" role="log" aria-label="Сообщения">{(data.messages ?? []).length ? data.messages!.map(message => <div key={message.id} className={`message ${message.authorUserId === data.user.id ? "mine" : "theirs"}`}><span>{message.authorName}</span>{message.photoKey && <a href={message.photoUrl || "#"} target="_blank" rel="noreferrer"><img className="chat-photo" src={message.photoUrl || ""} alt="Фотография в переписке" /></a>}{message.content && <p>{message.content}</p>}<div className="message-footer"><time>{format(new Date(message.createdAt), "HH:mm")}</time>{message.authorUserId === data.user.id && <button type="button" className="delete-message" onClick={() => setDeleteMessageTarget(message)} aria-label="Удалить своё сообщение">Удалить</button>}</div></div>) : <Empty icon={<MessageCircle />} text="Здесь появятся ваши сообщения" />}<div ref={messagesEnd} /></div>
@@ -303,5 +323,13 @@ async function decryptSecret(bytes:Uint8Array,iv:string,key:string){const result
 async function hashText(value:string){const result=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value));return toBase64(new Uint8Array(result));}
 function markerSymbol(marker:string){return marker==="heart"?"♥":marker==="cake"?"●":marker==="ring"?"◇":marker==="star"?"★":marker==="diamond"?"◆":"●";}
 
+function dayWord(value: number) {
+  const n = Math.abs(value) % 100;
+  const n1 = n % 10;
+  if (n > 10 && n < 20) return "дней";
+  if (n1 === 1) return "день";
+  if (n1 >= 2 && n1 <= 4) return "дня";
+  return "дней";
+}
 function prettyDate(value: string) { try { return format(parseISO(value), "d MMMM", { locale: ru }); } catch { return value; } }
 function safeLink(value: string) { return /^https?:\/\//i.test(value) ? value : `https://${value}`; }
